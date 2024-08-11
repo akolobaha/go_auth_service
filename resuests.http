@@ -1,0 +1,78 @@
+@login = "login"
+@password = "password"
+@email = ""
+
+### Создание пользователя
+POST localhost:8000/sign_up
+Content-Type: application/json
+
+{
+  "login": {{login}},
+  "password": {{password}},
+  "email": {{email}}
+}
+> {% client.global.set("auth_token", response.body.data.token); %}
+
+
+### Авторизация
+POST localhost:8000/sign_in
+Content-Type: application/json
+
+{
+  "login": {{login}},
+  "password": {{password}}
+}
+
+> {% client.global.set("auth_token", response.body.data.token); %}
+
+### Сброс пароля (сгенерируется)
+POST localhost:8000/reset_password
+Content-Type: application/json
+
+{
+  "login": {{login}},
+  "password": {{password}}
+}
+
+
+### Инфа о себе
+GET 127.0.0.1:8000/get_user_info
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+
+### Инфа о другом пользователе
+GET 127.0.0.1:8000/admin/get_user_info?user_id=66af65aed3c71460645398f6
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+
+### Обновление инфы о себе
+POST 127.0.0.1:8000/set_user_info
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+{
+  "name": "world33321111",
+  "active": true,
+  "age": 25,
+  "email": "test@mail.ru"
+}
+
+### Обновление роли
+POST 127.0.0.1:8000/set_user_role
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+{
+  "role": "admin"
+}
+
+### Активировать / деактивировать пользователя
+POST 127.0.0.1:8000/set_user_active?user_id=66afde13aad77a15492fbf0b
+Content-Type: application/j son
+Authorization: {{auth_token}}
+
+{
+  "active": true
+}
